@@ -1,0 +1,214 @@
+<html>
+
+<head>
+    <title>For My Love</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #app {
+            background-color: #2D2D2D;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Rubik', sans-serif;
+        }
+        
+        #popup {
+            width: 90vw;
+            /* max-width: 450px; */
+            max-width: 100%;
+            height: 600px;
+            border-radius: 6px;
+            margin: auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #7A548A;
+            box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.6);
+        }
+        
+        #cake {
+            position: absolute;
+            bottom: 50px;
+            z-index: 4;
+        }
+        
+        #dish {
+            position: absolute;
+            bottom: 40px;
+            z-index: 3;
+        }
+        
+        #table {
+            position: absolute;
+            bottom: -100px;
+            z-index: 2;
+        }
+        
+        #text {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            margin-top: 40px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin: 1rem 0;
+        }
+        
+        #years {
+            font-size: 5rem;
+            position: relative;
+        }
+        
+        #ord {
+            position: absolute;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="app">
+        <div id="popup">
+            <div id="text">
+                <h1>Happy</h1>
+                <h1 id="years">{{yearCounter}}<span id="ord">{{ord}}</span></h1>
+                <h1>Engagement Anniversary Dear</h1>
+            </div>
+            <svg id="cake" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="554.022 463 172 144" width="172" height="144"><g><g><ellipse vector-effect="non-scaling-stroke" cx="640.0220755799722" cy="582.4999999999999" rx="86" ry="24.5" fill="rgb(238,238,238)"/><rect x="554.022" y="522.5" width="172" height="60" transform="matrix(1,0,0,1,0,0)" fill="rgb(238,238,238)"/></g><g><ellipse vector-effect="non-scaling-stroke" cx="640.0220755799722" cy="522.5" rx="86" ry="24.5" fill="rgb(238,111,154)"/><path d=" M 554.022 522.5 L 554.022 548 Q 569.257 571.44 585.022 556 Q 600.787 540.56 617.022 563 Q 634.608 581.123 651.022 559 Q 667.437 536.877 688.022 559 Q 704.745 569.96 717.022 549 Q 724.586 536.603 726.022 543 L 726.022 522.5 L 554.022 522.5 Z " fill="rgb(238,111,154)"/></g><g><ellipse vector-effect="non-scaling-stroke" cx="639.9999999999999" cy="519.5855855855856" rx="6.719985291413309" ry="1.9144144144142956" fill="rgb(255,181,107)"/><ellipse vector-effect="non-scaling-stroke" cx="639.9999999999999" cy="480.91441441441407" rx="6.719985291413309" ry="1.9144144144142388" fill="rgb(255,181,107)"/><rect x="633.28" y="480.914" width="13.44" height="38.671" transform="matrix(1,0,0,1,0,0)" fill="rgb(255,181,107)"/></g><path d=" M 644 478 Q 639.5 482.875 636 478 C 631.979 472.399 640.75 469.875 640 463 Q 647.478 472.726 644 478 Z " fill="rgb(245,124,0)"/></g></svg>
+            <svg id="dish" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="534.044 555.309 211.956 60.383" width="211.956" height="60.383"><ellipse vector-effect="non-scaling-stroke" cx="640.0220755799722" cy="585.5" rx="105.97792442002776" ry="30.191385445240485" fill="rgb(255,255,255)"/></svg>
+            <svg id="table" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="269.022 498.853 762 269" width="762" height="269"><ellipse vector-effect="non-scaling-stroke" cx="650.0220755799724" cy="633.3526570048309" rx="338.0000000000001" ry="91.5" fill="rgb(104,175,234)"/></svg>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js"></script>
+    <script>
+        const YEARS = 1
+        const PAPER_AMOUNT = 80
+        const COLORS = [
+            '#ab47bc',
+            '#5c6bc0',
+            '#29b6f6',
+            '#66bb6a',
+            '#ffee58',
+            '#ffa726',
+            '#ef5350',
+        ]
+
+        function getOrdinalIndicator(num) {
+            switch (num) {
+                case 1:
+                case 21:
+                    return 'st'
+                case 2:
+                case 22:
+                    return 'nd'
+                case 3:
+                case 23:
+                    return 'rd'
+            }
+
+            return 'th'
+        }
+
+        function generatePapers(container) {
+            const maxPaperSize = container.offsetWidth / 40
+            const minPaperSize = maxPaperSize / 2
+
+            for (let i = 0; i < PAPER_AMOUNT; i++) {
+                const p = document.createElement('div')
+
+                p.style.position = 'absolute'
+                p.style.top = `-${maxPaperSize}px`
+                p.style.left = `${anime.random(-5, container.offsetWidth + 5)}px`
+                p.style.width = `${anime.random(minPaperSize, maxPaperSize)}px`
+                p.style.height = `${anime.random(minPaperSize, maxPaperSize)}px`
+                p.style.backgroundColor = COLORS[i % COLORS.length]
+
+                container.appendChild(p)
+                animatePaper(p, container)
+            }
+        }
+
+        function animatePaper(p, container) {
+            anime({
+                targets: p,
+                delay: anime.random(0, 7000),
+                duration: anime.random(5000, 7000),
+                easing: 'linear',
+                loop: true,
+                translateX: `${anime.random(-20, 20)}px`,
+                translateY: `${container.offsetHeight * 2 / 3}px`,
+                skewX: `${anime.random(-45, 45)}deg`,
+                skewY: `${anime.random(-45, 45)}deg`,
+                rotate: `${anime.random(-1.5, 1.5)}turn`,
+                opacity: [0.8, 0],
+            })
+        }
+
+        var app = new Vue({
+            el: '#popup',
+            data: {
+                yearCounter: 0,
+                ord: getOrdinalIndicator(YEARS),
+            },
+            mounted() {
+                anime.timeline({
+                    loop: false
+                }).add([{
+                    targets: '#popup',
+                    scale: [0, 1],
+                    duration: 1500,
+                    delay: 500,
+                }, {
+                    targets: '#table',
+                    translateY: ['180px', 0],
+                    duration: 2000,
+                }, {
+                    targets: '#dish',
+                    translateY: ['200px', 0],
+                    duration: 2000,
+                    offset: '-=1950',
+                }, {
+                    targets: '#cake',
+                    translateY: ['200px', 0],
+                    duration: 2000,
+                    offset: '-=1950',
+                }, {
+                    targets: '#text h1',
+                    scale: [0, 1],
+                    opacity: [0, 1],
+                    duration: 2000,
+                    delay: (el, i) => i * 100,
+                    offset: '-=500',
+                }, {
+                    targets: this,
+                    yearCounter: [0, YEARS],
+                    duration: 1000,
+                    round: 1,
+                    offset: '-=2000',
+                    easing: 'easeInOutQuart',
+                    begin: () => generatePapers(document.getElementById('popup')),
+                }, {
+                    targets: '#ord',
+                    scale: [0, 1],
+                    opacity: [0, 1],
+                    duration: 1000,
+                    offset: '-=500',
+                }, ])
+            },
+        })
+    </script>
+</body>
+
+
+</html>
